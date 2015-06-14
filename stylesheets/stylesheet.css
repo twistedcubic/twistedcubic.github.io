@@ -8,10 +8,17 @@ body {
   font-size: 16px;
   line-height: 1.5;
   color: #606c71; }
+section.centerIm
+{
+	text-align:center;
+	margin-top:0px;
+	margin-bottom:0px;
+	padding:0px;
+}
 
 a {
-  color: #1e6bb8;
-  text-decoration: none; }
+	color: #1e6bb8;
+	text-decoration: none; }
   a:hover {
     text-decoration: underline; }
 
@@ -61,6 +68,7 @@ a {
 
 @media screen and (min-width: 64em) {
   .page-header {
+	  margin:0;
     padding: 5rem 6rem; } }
 
 @media screen and (min-width: 42em) and (max-width: 64em) {
@@ -72,7 +80,7 @@ a {
     padding: 2rem 1rem; } }
 
 .project-name {
-  margin-top: 0;
+  margin-top: 0; 
   margin-bottom: 0.1rem; }
 
 @media screen and (min-width: 64em) {
@@ -107,7 +115,13 @@ a {
 .main-content :first-child {
   margin-top: 0; }
 .main-content img {
-  max-width: 100%; }
+	display:block;
+	margin-left:auto;
+	margin-right:auto;
+	margin-top:0px;
+	margin-bottom:5px;
+	padding:0px;
+	max-width: 100%; }
 .main-content h1, .main-content h2, .main-content h3, .main-content h4, .main-content h5, .main-content h6 {
   margin-top: 2rem;
   margin-bottom: 1rem;
