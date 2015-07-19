@@ -1,7 +1,7 @@
 $(document).ready(function(){
 
-    var transition = ["therefore ", "although ", "<br> ", "just because. ",  " I suppose. ", " well then. ", " ", " despite that, ", " ", "<br>" ];
-    var transitionCap = ["Therefore ", "Although ", "<br> ", "Just because. ",  " I suppose. ", " Well then. ", " ", " Despite that, ", " ", "<br>" ];
+    var transition = ["therefore ", "although ", "<br> ", "just because. ",  " about time. ", " well then. ", " ", " despite that, ", " ", "<br>", "long past due. " ];
+    var transitionCap = ["Therefore ", "Although ", "<br> ", "Just because. ",  " About time. ", " Well then. ", " ", " Despite that, ", " ", "<br>", "Long past due. " ];
 
     var map = {Obama:"The Boss", Clinton:"The Woman", Bush:"the maverick", Congress:"the old boys' club"};
     var regex = /Clinton|Obama|Bush|Congress/ig;
@@ -71,13 +71,14 @@ $(document).ready(function(){
 	    
 	    var titles = "";
 	    //var period = [", ", ". "];  //period or comma
-	    
+	    //var counter = 0; //count up to num_results so not to put transition at the end
 	    $.each(data.results, function(index, value){
 		
 		var newTitle = value.title.replace(regex, function(matched){
 		    return map[matched];
 		});
-		var rand = Math.random();
+		var rand = Math.random();		
+
 		if( (Math.round(rand)%2) == 0) //use lower case transitions
 		    titles += (newTitle + ", " + transition[Math.round(rand*(transition.length-1))]);
 		else //upper case transition
