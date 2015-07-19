@@ -57,21 +57,25 @@
       if(data.response.meta.hits == 0)
       alert("Darn, no hits!");
 
+      var titles = "";
       $.each(data.response.docs, function(index, value){
       var map = {Obama:"The Boss", Clinton:"The Woman"};
       var newTitle = value.snippet.replace(/Clinton|Obama/ig , function(matched){
       return map[matched];
 
       });
-      document.write(newTitle);
-      //document.write(",\n");
-      document.write(transition[Math.round(Math.random()*(transition.length-1))]);
+
+      titles += newTitle + ", " + transition[Math.round(Math.random()*(transition.length-1))];
+      //document.write(newTitle); 
+      //document.write(transition[Math.round(Math.random()*(transition.length-1))]);
 
       });
-      $("#reload").show;
+      document.getElementById("loadDate").innerHTML = titles;
+
+      /* $("#reload").show;
       $("#reload").click(function( ) {
       location.reload();
-      });
+      }); */
 
       });
       });
@@ -82,21 +86,22 @@
       method: "GET",
       dataType: "json"
       }).done(function(data){
-
+      
+      var titles = "";
       $.each(data.results, function(index, value){
  
       var map = {Obama:"The Boss", Clinton:"The Woman", Bush:"the maverick"};
-
       var newTitle = value.title.replace(/Clinton|Obama|Bush/ig , function(matched){
       return map[matched];
       });
-      
-      document.write(newTitle);
-      document.write(",\n");
-      document.write(transition[Math.round(Math.random()*(transition.length-1))]);
+      titles += (newTitle + ", " + transition[Math.round(Math.random()*(transition.length-1))]);
+
+      //document.write(newTitle);
+      //document.write(",\n");
+      //document.write(transition[Math.round(Math.random()*(transition.length-1))]);
       });
-      //document.write(transition.length);
-      //document.write(Math.round(Math.random()*(transition.length-1)));
+      document.getElementById("loadTop").innerHTML = titles;
+
       $("#reload").click(function( ) {
       location.reload();
       });
@@ -118,10 +123,14 @@
       <p> Get news stories from <input type="text" id="first"> to <input type="text" id="second"> </p>
       <p>Keywords <input type="text" id="keyword"></p>
       <button id="date">Fetch me some news</button>
+      <section id = "loadDate"></section>
+
       <!--<button id="reload">Reload</button> -->
       <p></p>
+
       <p>Or read</p>
       <button id="top">Today's top stories</button>
+      <section id = "loadTop"></section>
     </section>
   </body>
 
