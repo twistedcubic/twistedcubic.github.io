@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>map</title>
+  <meta name="map to news" >
+  <style>
+    html, body, #map-canvas{
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    }
+  </style>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVE2MjYCX2lz5UACVMqLoYdk2aabCUhOU"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+  <!-- <script src="map.js"></script>  -->
+  <script>
+ //   $(document).ready(function(){
+    var map;
+    function initialize(){
+    map = new google.maps.Map(document.getElementById("map-canvas"), {
+    zoom: 8,
+    center: {lat: -34, lng: 150}
+    });
+    };
+    google.maps.even.addDomListener(window, 'load', initialize);
+    //$.ajax                                                                    
+
+  //  });
+
+  </script>
+</head>
+<body>
+  <div id="map-canvas"></div>
+</body>
+
+</html>
