@@ -71,7 +71,7 @@ $(document).ready(function(){
 	    
 	    var titles = "";
 	    //var period = [", ", ". "];  //period or comma
-	    //var counter = 0; //count up to num_results so not to put transition at the end
+	    //var counter = 1; //count up to num_results so not to put transition at the end
 	    $.each(data.results, function(index, value){
 		
 		var newTitle = value.title.replace(regex, function(matched){
