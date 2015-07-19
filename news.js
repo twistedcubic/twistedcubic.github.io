@@ -1,6 +1,10 @@
 $(document).ready(function(){
 
-    var transition = ["therefore ", "although ", "<br> ", "just because.",  " I suppose. ", " well then ", " ", " despite that, ", " ", "<br>" ];
+    var transition = ["therefore ", "although ", "<br> ", "just because. ",  " I suppose. ", " well then. ", " ", " despite that, ", " ", "<br>" ];
+    var transitionCap = ["Therefore ", "Although ", "<br> ", "Just because. ",  " I suppose. ", " Well then. ", " ", " Despite that, ", " ", "<br>" ];
+
+    var map = {Obama:"The Boss", Clinton:"The Woman", Bush:"the maverick", Congress:"the old boys' club"};
+    var regex = /Clinton|Obama|Bush|Congress/ig;
     $("#first").datepicker();
     $("#second").datepicker();
     $("#date").click( function date( ){
@@ -24,14 +28,12 @@ $(document).ready(function(){
 	if(secondFormatDate != ""){
 	    searchTerm += ("end_date=" + secondFormatDate + "&");
 	    console.log(Number(secondFormatDate));
-	}
-	
+	}	
 
 	if(searchTerm == ""){
 	    alert("Gotta enter something!");
 	    return;
 	}
-	//console.log($.datepicker.formatDate("yymmdd", firstDate));
 
 	$.ajax({
 
@@ -45,17 +47,14 @@ $(document).ready(function(){
 		alert("Darn, no hits!");
 
 	    var titles = "";
-	    var map = {Obama:"The Boss", Clinton:"The Woman"};
 
 	    $.each(data.response.docs, function(index, value){
-		var newTitle = value.snippet.replace(/Clinton|Obama/ig , function(matched){
+		var newTitle = value.snippet.replace(regex , function(matched){
 		    return map[matched];
 
 		});
 
-		titles += (newTitle + transition[Math.round(Math.random()*(transition.length-1))]);
-		//document.write(newTitle); 
-		//document.write(transition[Math.round(Math.random()*(transition.length-1))]);
+		titles += (" " + newTitle + " " + transitionCap[Math.round(Math.random()*(transition.length-1))]);
 
 	    });
 	    document.getElementById("loadDate").innerHTML = titles;
@@ -71,17 +70,19 @@ $(document).ready(function(){
 	}).done(function(data){
 	    
 	    var titles = "";
+	    //var period = [", ", ". "];  //period or comma
+	    
 	    $.each(data.results, function(index, value){
 		
-		var map = {Obama:"The Boss", Clinton:"The Woman", Bush:"the maverick"};
-		var newTitle = value.title.replace(/Clinton|Obama|Bush/ig , function(matched){
+		var newTitle = value.title.replace(regex, function(matched){
 		    return map[matched];
 		});
-		titles += (newTitle + ", " + transition[Math.round(Math.random()*(transition.length-1))]);
-
-		//document.write(newTitle);
-		//document.write(",\n");
-		//document.write(transition[Math.round(Math.random()*(transition.length-1))]);
+		var rand = Math.random();
+		if( (Math.round(rand)%2) == 0) //use lower case transitions
+		    titles += (newTitle + ", " + transition[Math.round(rand*(transition.length-1))]);
+		else //upper case transition
+		    titles += (newTitle + ". " + transitionCap[Math.round(rand*(transition.length-1))]);
+		
 	    });
 	    document.getElementById("loadTop").innerHTML = titles;
 
