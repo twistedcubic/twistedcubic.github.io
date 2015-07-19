@@ -13,7 +13,7 @@
     <script>
       $(document).ready(function(){
 
-      var transition = [" really? ", " I suppose. ", " you're kidding. ", " but then ", " ", " despite that, ", " "];
+      var transition = ["therefore, ", "although, ", "<br> ", "and then,",  " I suppose. ", " but then ", " ", " despite that, ", " "];
       $("#first").datepicker();
       $("#second").datepicker();
       $("#date").click( function date( ){
@@ -58,24 +58,20 @@
       alert("Darn, no hits!");
 
       var titles = "";
-      $.each(data.response.docs, function(index, value){
       var map = {Obama:"The Boss", Clinton:"The Woman"};
+
+      $.each(data.response.docs, function(index, value){
       var newTitle = value.snippet.replace(/Clinton|Obama/ig , function(matched){
       return map[matched];
 
       });
 
-      titles += newTitle + ", " + transition[Math.round(Math.random()*(transition.length-1))];
+      titles += (newTitle + transition[Math.round(Math.random()*(transition.length-1))]);
       //document.write(newTitle); 
       //document.write(transition[Math.round(Math.random()*(transition.length-1))]);
 
       });
       document.getElementById("loadDate").innerHTML = titles;
-
-      /* $("#reload").show;
-      $("#reload").click(function( ) {
-      location.reload();
-      }); */
 
       });
       });
