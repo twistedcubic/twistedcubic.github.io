@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Space</title>
+  <meta content="info about space">
+  <script type="text/javascript">
+	function reqListener(){
+	console.log(this.responseText);
+	}
+
+	function getText(){
+	var req = new XMLHttpRequest();
+	req.onreadystatechange=function(){
+	if (req.readyState==4 && req.status==200){
+	var res = req.responseText;
+	document.getElementById("writeText").innerHTML = res;
+	document.write(res);
+	req.addEventListener("load", reqListener);
+	}
+	}
+	req.open("GET", "http://www.google.com", true);
+	req.send();
+	}
+  </script>
+</head>
+
+<!--info  -->
+<body>
+<p>How many people are in space right now</p>
+<div id="writeText"> </div>
+<script>
+  getText();
+</script>
+
+</body>
+</html>
