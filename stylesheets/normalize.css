@@ -322,6 +322,11 @@ input {
   line-height: normal;
 }
 
+.textInput {
+  width: 80%
+}
+
+
 /**
  * It's recommended that you don't attempt to style these elements.
  * Firefox's implementation doesn't respect box-sizing, padding, or width.
