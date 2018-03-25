@@ -1,0 +1,45 @@
+
+@charset "UTF-8";
+
+/*
+body {
+    padding: 0;
+}
+*/
+
+.square {
+    border: 1px solid #000000;
+    border-width: 1px 1px 1px 1px;
+    width: 35px;
+    height: 35px;
+}
+
+.footer {
+   position: fixed;
+   text-indent: 20px;
+   font-size: small;
+   font-style: italic;
+   bottom: 0;
+}
+
+.textSmall {
+   font-size: small;
+}
+
+.textLeft {
+   text-align: left;
+}
+
+.textBold {
+   font-weight: bold;
+}
+
+.textIt {
+   font-style: italic;
+}
+
+.square div {
+    border: 1px solid #000000;
+    border-width: 1px 1px 1px 1px;
+    float: left;
+}

@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<!--crossword server frontend-->
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Math Search</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link rel="stylesheet" href="stylesheets/puzzle.css" />
+	<link rel="stylesheet" href="stylesheets/main.css" />
+	<script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
+
+</head>
+<body class="landing">
+
+	<!-- Header -->
+	<header id="header" class="alt">
+		<h1>
+			<a href="index.html">Puzzle Bazaar</a>
+		</h1>
+	</header>
+
+	<section id="banner" class="wrapper special">
+		<div class="inner">
+			<form class="inputForm" id="inputForm">
+				<div class="row uniform 50%">
+					<div class="12u$">
+						<!--<textarea name="text" name="inputString" id="inputString" rows="2"></textarea>-->
+						<div class="textSmall textLeft">Enter comma-separated word-clue pairs, e.g. "apple, green, banana, yellow"</div>
+						<!--<input type="text" name="inputString" id="inputString"  />-->
+						<textarea name="inputString" id="inputString" rows="4" cols="40" placeholder="Enter text content" ></textarea>
+					</div>
+				</div>
+				<hr/>
+				<div>
+					<input type="submit" name="submitInputBtn" class="special"
+						id="enterString" value="Create Puzzle" />
+				</div>
+				
+				<!-- <ul class="actions">
+					<li><input type="submit" name="submitInputBtn" class="special"
+						id="enterString" value="Search" /></li>
+					<li><input type="button" name="clearOutputBtn" class="special" id="clearOutput"
+						value="Clear" /></li>
+				</ul> -->
+			</form>
+		</div>
+		
+		<div id="container" class="align-left">
+			<div class="args"></div>
+		</div>
+		
+		<!-- <div>
+			Made with love, for momu & dadu.
+		</div> -->
+	
+	</section>
+
+	<script>
+	
+    $("#test1").append($(
+            "<div>",
+            {
+                id: "test2",
+                text: "hi",
+                
+            }
+        ).css("position","absolute")
+        .css("left",100)
+        .css("top",40)
+        );
+    
+		$("#clearOutput").click(function(event) {
+			event.preventDefault();
+			$("#container").empty();
+		});		
+		
+		//when "search" button is clicked
+		$("#inputForm").submit(function(event) {
+			event.preventDefault();
+			var inputStr = $("#inputString").val();
+			//console.log("document.location.href: " + document.location.href);
+			createPuzzle(inputStr);
+		})
+		
+		var SERVER_ERROR = 500;
+		var NODE_WIDTH = 35;
+		var NODE_HEIGHT = 35;
+		var TEXT_HEIGHT = 20;
+		var ROW_BASE = 380;
+		var COL_BASE = 150;
+		var COL_SEPARATOR_SPACE = 250;
+		
+		//figure out the server on which this is run
+		//var cur_url = document.location.href;
+		//has form e.g. http://localhost:8080/crossword/crossword
+		//var page_url = cur_url.replace("index.html", "") + "crossword";
+		var page_url = "http://104.131.18.153:8080/crossword/crossword";
+		/*append given element to #container at given positions, as a div. */
+		var appendElemToContainer = function(idStr, textStr, leftOffset, topOffset){
+			$("#container").append(
+					$("<div>",
+					{
+						id: idStr,
+						text: textStr
+					}
+					).css("position","absolute")
+					.css("font-family", "fantasy")
+					.css("font-weight", "bold")
+					//dynamically adjust these!!
+				    .css("left", leftOffset)
+				    .css("top", topOffset)
+			);
+		}
+		
+		var appendWordsAndHints = function(rowMax, colMax){
+			let hintsStartRow = ROW_BASE + NODE_HEIGHT * (rowMax+3);
+			appendElemToContainer("rowHints", "Row hints:", COL_BASE, hintsStartRow);
+			appendElemToContainer("colHints", "Column hints:", COL_BASE+COL_SEPARATOR_SPACE, hintsStartRow);
+			
+			let rowColMax = rowMax > colMax ? rowMax : colMax;
+			//let wordsStartRow = hintsStartRow + TEXT_HEIGHT * rowColMax;
+			let wordsStartRow = hintsStartRow + TEXT_HEIGHT * rowColMax;
+			appendElemToContainer("rowWords", "Row words:", COL_BASE, wordsStartRow);
+			appendElemToContainer("colWords", "Column words:", COL_BASE+COL_SEPARATOR_SPACE, wordsStartRow);			
+					
+		}
+		
+		var createPuzzle = function(wordsStr) {
+			if (wordsStr == null || wordsStr.length == 0)
+				return;			
+			
+			//must send request as string!
+			//var commaPat = /\s*,\s*/;
+			//var wordsAr = wordsStr.split(commaPat);
+			//console.log("Making GET request, wordsStr: " + wordsStr);
+			
+			$.ajax({
+				url : page_url,
+				dataType : "json",
+				data : {
+					words : wordsStr
+				},
+				type : "GET",
+				cache: false
+			}).done(
+					function(response) {
+						//response is a collection of lists recording coordinates, 
+						//and some maps for which labels go with which words.
+						
+						//console.log("Returned from GET request. Response: "+response);
+						
+						if(response == SERVER_ERROR){
+							container.prepend("<div>Oops, something internal went wrong. Working on it!</div>")
+							return;
+						}
+						
+						if(response != null){
+							$("#container").empty();
+							
+							let rowMax = response["rowMax"];
+							let colMax = response["colMax"];
+							appendWordsAndHints(rowMax, colMax);
+							
+							let coordinates = response["coordinates"];
+							//response will consists of list of strings that 
+							//are highest-ranked thms. Make it left-aligned!
+							$.each(coordinates, function(index, item) {
+							
+								//console.log("row col " + item["row"] +" " + item["col"]);
+								//process each PuzzleNodeCoordinates in list
+								if(item["row"] == null || item["col"] == null){
+									return true;
+								}								
+								
+								let wordLabel = item["label"];
+								//draw at row and col coordinates.
+								$("#container").append(
+										$("<div>",
+										{
+											class: "square",
+											text: wordLabel
+										}
+										).css("position","absolute")
+										//dynamically adjust these!!
+									    .css("left", item["col"]*NODE_WIDTH + COL_BASE)
+									    .css("top", item["row"]*NODE_HEIGHT + ROW_BASE)
+								);
+								
+								//console.log(item["rowWord"] + " item['colWord'] " +item["colWord"]);
+								
+								//a coordinate can have either rowWord or colWord, or both
+								if(undefined != item["rowWord"]){
+									let elemId = "rowWords";
+									let word = item["rowWord"];
+									appendWord(elemId, word, wordLabel);
+								}
+								if(undefined != item["colWord"]){
+									let elemId = "colWords";
+									let word = item["colWord"];
+									appendWord(elemId, word, wordLabel);
+								}
+								
+								if(undefined != item["rowHint"]){
+									let elemId = "rowHints";
+									let hint = item["rowHint"];
+									appendWord(elemId, hint, wordLabel);
+								}
+								if(undefined != item["colHint"]){
+									let elemId = "colHints";
+									let hint = item["colHint"];
+									appendWord(elemId, hint, wordLabel);
+								}
+								
+							});
+							
+						}else{
+							container.prepend("<div>I've got nothing for you yet. Try again.</div>");
+						}
+					});
+
+		}//end of createPuzzle() function
+		
+		//id of element to attach to, and the word to attach. Truncate hints so to not overflow.
+		var appendWord = function(elemId, word, wordLabel){
+			$("#"+elemId).append(
+					$("<div>",
+					{
+						//class: "square",
+						text: wordLabel + ". " + word
+					}
+					)
+					.css("font-weight", "normal")
+					.css("width", COL_SEPARATOR_SPACE + "px")
+					.css("white-space", "nowrap")
+					.css("overflow", "hidden")
+					.css("text-overflow", "ellipsis")
+			);			
+		}
+		
+		$("#commentForm").submit(function(event) {
+			event.preventDefault();
+
+			var comment = $("#comment").val();
+			var uuid = $("#uuid").val();
+			sendComment(comment, uuid);
+			giveThanks();
+
+		})
+
+		var giveThanks = function() {
+			var container = $(".formSubmitted");
+			//pick something random
+			//if($('.formSubmittedParent > div.formSubmitted:contains(".*")').length > 0){
+			if ($('.formSubmitted > div').length > 0) {
+				container.html("<div>You rock!</div>");
+			} else {
+				container.html("<div>Thanks!</div>");
+			}
+
+		}
+
+		var sendComment = function(comment, uuid) {
+			if (comment == null || comment.length == 0)
+				return;
+			var cur_url = document.location.href;
+			var url = cur_url.replace("search.html", "") + "thmp1";
+			
+			$.ajax({
+				url : "http://localhost:8080/theoremSearch/thmp1",
+				dataType : "json",
+				data : {
+					"comment" : comment,
+					"uuid" : uuid
+				},
+				type : "POST",
+				success : function() {
+					$(".formSubmitted").html("<div>Thanks!</div>");
+				}
+
+			});
+		}
+	</script>
+
+	<script src="assets/js/skel.min.js"></script>
+	<script src="assets/js/util.js"></script>
+	<script src="assets/js/main.js"></script>	
+	
+	<!-- <div position="fixed" bottom=0>
+			Made with love, for momu & dadu.
+	</div>-->
+	<div class=footer>
+			To momu & dadu.
+	</div>
+	
+	
+</body>
+</html>
