@@ -33,8 +33,12 @@
 	
 	<p class="textBold"><a href="crossword" >START!</a></p>
 	<p>The algorithm uses dynamic programming to efficiently generate possible puzzle tile placements,
-	it then ranks them based on number of tile intersections, word placement distributions, etc, finally returning the best.
-	<a href="https://github.com/twistedcubic/crossword">Source</a> for the crossword generator and 
+	  it then ranks them based on number of tile intersections, word placement distributions, etc, finally returning the best.
+	  The use of dynamic programming and beam search avoids iterating through the exponential number of possible puzzle configurations.
+	  The scoring system aims to maximize the number of word intersections, create balanced horizontal and vertical words, and evenly spread
+	  out the words.
+	</p>
+	<p>Here are <a href="https://github.com/twistedcubic/crossword">Source</a> for the crossword generator and 
     	<a href="https://github.com/twistedcubic/crosswordServlet">source</a> for the servlet and web frontend.</p>
     
     <div>This app was inspired by my granddad's love for puzzles. My family used it to created custom puzzles to 
