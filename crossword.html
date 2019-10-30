@@ -92,9 +92,9 @@
 		
 		//figure out the server on which this is run
 		//var cur_url = document.location.href;
-		//has form e.g. http://localhost:8080/crossword/crossword
+		//has form e.g. https://localhost:8080/crossword/crossword
 		//var page_url = cur_url.replace("index.html", "") + "crossword";
-		var page_url = "http://104.131.18.153:8080/crossword/crossword";
+		var page_url = "https://104.131.18.153:8080/crossword/crossword";
 		/*append given element to #container at given positions, as a div. */
 		var appendElemToContainer = function(idStr, textStr, leftOffset, topOffset){
 			$("#container").append(
@@ -266,7 +266,7 @@
 			var url = cur_url.replace("search.html", "") + "thmp1";
 			
 			$.ajax({
-				url : "http://localhost:8080/theoremSearch/thmp1",
+				url : "https://localhost:8080/theoremSearch/thmp1",
 				dataType : "json",
 				data : {
 					"comment" : comment,
